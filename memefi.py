@@ -363,7 +363,11 @@ def main():
         # Kumpulkan informasi akun terlebih dahulu
         accounts = []
         for index, line in enumerate(lines):
-            result = cek_user(index)
+            result = None
+            try:
+                result = cek_user(index)
+            except e:
+                print("check error..........")
             if result is not None:
                 first_name = result.get('firstName', 'Unknown')
                 last_name = result.get('lastName', 'Unknown')
