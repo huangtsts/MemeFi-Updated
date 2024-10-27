@@ -445,7 +445,7 @@ def main():
 
         print("=== [ ALL ACCOUNTS HAVE BEEN PROCESSED ] ===")
         print("=== [ SUBSCRIBE ME ON YOUTUBE - https://www.youtube.com/@D4rkCipherX ] ===")
-        animate_energy_recharge(15000)
+        animate_energy_recharge(36000)
 
 # Jalankan fungsi main() dan simpan hasilnya
 
