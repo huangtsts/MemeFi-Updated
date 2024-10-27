@@ -20,13 +20,14 @@ def load_proxies():
 proxies = load_proxies()
 
 # HANDLE SEMUA ERROR TAROH DISINI BANG SAFE_POST
-def safe_post(url, headers, json_payload):
+def safe_post(index,url, headers, json_payload):
     retries = 5
     timeout = 5  # Timeout in seconds for each connection attempt
     for attempt in range(retries):
         try:
             if proxies:
-                proxy = random.choice(proxies)
+                proxy = proxies[index]
+                print(str(proxy))
                 if '@' in proxy:
                     user_pass, proxy_ip = proxy.split('@')
                     proxy_auth = base64.b64encode(user_pass.encode()).decode()
@@ -137,7 +138,7 @@ def cek_user(index):
         "query": QUERY_USER
     }
 
-    response = safe_post(url, headers, json_payload)
+    response = safe_post(index,url, headers, json_payload)
     if response and 'errors' not in response:
         user_data = response['data']['telegramUserMe']
         return user_data  # Mengembalikan hasil response
@@ -158,7 +159,7 @@ def activate_energy_recharge_booster(index, headers):
         "query": QUERY_BOOSTER
     }
 
-    response = safe_post(url, headers, recharge_booster_payload)
+    response = safe_post(index,url, headers, recharge_booster_payload)
     if response and 'data' in response and response['data'] and 'telegramGameActivateBooster' in response['data']:
         new_energy = response['data']['telegramGameActivateBooster']['currentEnergy']
         print(f"\n🔋 Energy is charged. Current energy: {new_energy}")
@@ -179,7 +180,7 @@ def activate_booster(index, headers):
         "query": QUERY_BOOSTER
     }
 
-    response = safe_post(url, headers, recharge_booster_payload)
+    response = safe_post(index,url, headers, recharge_booster_payload)
     if response and 'data' in response:
         current_health = response['data']['telegramGameActivateBooster']['currentBoss']['currentHealth']
         current_level = response['data']['telegramGameActivateBooster']['currentBoss']['level']
@@ -222,7 +223,7 @@ def submit_taps(index, json_payload):
     headers = headers_set.copy()
     headers['Authorization'] = f'Bearer {access_token}'
 
-    response = safe_post(url, headers, json_payload)
+    response = safe_post(index,url, headers, json_payload)
     if response:
         return response  # Pastikan mengembalikan data yang sudah diurai
     else:
@@ -241,7 +242,7 @@ def set_next_boss(index, headers):
         "query": QUERY_NEXT_BOSS
     }
 
-    response = safe_post(url, headers, boss_payload)
+    response = safe_post(index,url, headers, boss_payload)
     if response and 'data' in response:
         print("✅ Successfully changing bosses.", flush=True)
     else:
@@ -261,7 +262,7 @@ def cek_stat(index, headers):
         "query": QUERY_GAME_CONFIG
     }
 
-    response = safe_post(url, headers, json_payload)
+    response = safe_post(index,url, headers, json_payload)
     if response and 'errors' not in response:
         user_data = response['data']['telegramGameGetConfig']
         return user_data
@@ -279,7 +280,7 @@ def check_and_complete_tasks(index, headers):
         "query": QUERY_GET_TASK
     }
 
-    response = safe_post(url, headers, task_list_payload)
+    response = safe_post(index,url, headers, task_list_payload)
     if response and 'errors' not in response:
         tasks = response
     else:
@@ -304,7 +305,7 @@ def check_and_complete_tasks(index, headers):
 
             view_task_payload = {"operationName": "GetTaskById", "variables": {"taskId": task['id']}, "query": "fragment FragmentCampaignTask on CampaignTaskOutput {\n  id\n  name\n  description\n  status\n  type\n  position\n  buttonText\n  coinsRewardAmount\n  link\n  userTaskId\n  isRequired\n  iconUrl\n  __typename\n}\n\nquery GetTaskById($taskId: String!) {\n  campaignTaskGetConfig(taskId: $taskId) {\n    ...FragmentCampaignTask\n    __typename\n  }\n}"}
             print(view_task_payload)
-            view_response = safe_post(url, headers, view_task_payload)
+            view_response = safe_post(index,url, headers, view_task_payload)
             if 'errors' in view_response:
                 print(f"\r❌ Failed to get task details: {task['name']}")
                 print(view_response)
@@ -320,7 +321,7 @@ def check_and_complete_tasks(index, headers):
                 "variables": {"userTaskId": task['userTaskId']},
                 "query": QUERY_TASK_VERIF
             }
-            verify_response = safe_post(url, headers, verify_task_payload)
+            verify_response = safe_post(index,url, headers, verify_task_payload)
             if 'errors' not in verify_response:
                 print(f"\r✅ {task['name']} | Moved to Verification", flush=True)
             else:
@@ -330,7 +331,7 @@ def check_and_complete_tasks(index, headers):
          
 
     # Cek ulang task setelah memindahkan ke verification
-    updated_tasks = safe_post(url, headers, task_list_payload)
+    updated_tasks = safe_post(index,url, headers, task_list_payload)
     print("\nUpdated Task List After Verification:\n")
     for task in updated_tasks['data']['campaignTasks']:
         print(f"{task['name']} | {task['status']}")
@@ -341,7 +342,7 @@ def check_and_complete_tasks(index, headers):
                 "variables": {"userTaskId": task['userTaskId']},
                 "query": QUERY_TASK_COMPLETED
             }
-            complete_response = safe_post(url, headers, complete_task_payload)
+            complete_response = safe_post(index,url, headers, complete_task_payload)
             if 'errors' not in complete_response:
                 print(f"\r✅ {task['name']} | Completed                         ", flush=True)
             else:
