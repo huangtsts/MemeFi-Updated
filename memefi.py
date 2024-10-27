@@ -445,7 +445,8 @@ def main():
 
         print("=== [ ALL ACCOUNTS HAVE BEEN PROCESSED ] ===")
         print("=== [ SUBSCRIBE ME ON YOUTUBE - https://www.youtube.com/@D4rkCipherX ] ===")
-        animate_energy_recharge(36500)
+        wait_num =  random.randint(6000, 25000)
+        animate_energy_recharge(wait_num)
 
 # Jalankan fungsi main() dan simpan hasilnya
 
