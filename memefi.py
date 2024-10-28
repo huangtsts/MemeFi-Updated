@@ -27,6 +27,7 @@ def safe_post(index,url, headers, json_payload):
         try:
             if proxies:
                 proxy = proxies[index]
+                print(str(json_payload))
                 print(str(url))
                 print(str(proxy))
                 if '@' in proxy:
