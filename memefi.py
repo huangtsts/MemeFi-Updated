@@ -27,7 +27,6 @@ def safe_post(index,url, headers, json_payload):
         try:
             if proxies:
                 proxy = proxies[index]
-                print(str(json_payload))
                 print(str(url))
                 print(str(proxy))
                 if '@' in proxy:
@@ -205,6 +204,7 @@ def activate_booster(index, headers):
                 "query": MUTATION_GAME_PROCESS_TAPS_BATCH
             }
             for _ in range(50):
+                print("tab...")
                 tap_result = submit_taps(index, tap_payload)
                 if tap_result is not None:
                     if 'data' in tap_result and 'telegramGameProcessTapsBatch' in tap_result['data']:
