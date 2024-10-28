@@ -366,7 +366,7 @@ def main():
             result = None
             try:
                 result = cek_user(index)
-            except e:
+            except Exception as e:
                 print("check error..........")
             if result is not None:
                 first_name = result.get('firstName', 'Unknown')
@@ -447,7 +447,7 @@ def main():
                     if turbo_booster == 'y':
                         if user_data['freeBoosts']['currentTurboAmount'] > 0:
                             activate_booster(index, headers)
-            except e:
+            except Exception as e:
                 print("error...........")
         print("=== [ ALL ACCOUNTS HAVE BEEN PROCESSED ] ===")
         print("=== [ SUBSCRIBE ME ON YOUTUBE - https://www.youtube.com/@D4rkCipherX ] ===")
